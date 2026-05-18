@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package cinema;
+
+option go_package = "cinema-management/backend/proto;cinemapb";
+
+message IDRequest {
+  uint64 id = 1;
+}
+
+message Empty {}
+
+message Movie {
+  uint64 id = 1;
+  string title = 2;
+  string description = 3;
+  string genre = 4;
+  int32 duration_minutes = 5;
+  string poster_url = 6;
+  string status = 7;
+}
+
+message Showtime {
+  uint64 id = 1;
+  uint64 movie_id = 2;
+  uint64 room_id = 3;
+  string show_date = 4;
+  string start_time = 5;
+  string end_time = 6;
+  double ticket_price = 7;
+}
+
+message Ticket {
+  uint64 id = 1;
+  uint64 showtime_id = 2;
+  double total_price = 3;
+  string status = 4;
+}
+
+message Employee {
+  uint64 id = 1;
+  string full_name = 2;
+  string email = 3;
+  string phone = 4;
+  string role = 5;
+  bool is_on_shift = 6;
+}
+
+message Attendance {
+  uint64 id = 1;
+  uint64 employee_id = 2;
+  string clock_in_time = 3;
+  string clock_out_time = 4;
+}
+
+message MovieList { repeated Movie items = 1; }
+message ShowtimeList { repeated Showtime items = 1; }
+message TicketList { repeated Ticket items = 1; }
+message EmployeeList { repeated Employee items = 1; }
+message AttendanceList { repeated Attendance items = 1; }
+
+service MovieService {
+  rpc ListMovies(Empty) returns (MovieList);
+  rpc GetMovie(IDRequest) returns (Movie);
+}
+
+service ShowtimeService {
+  rpc ListShowtimes(Empty) returns (ShowtimeList);
+  rpc GetShowtime(IDRequest) returns (Showtime);
+}
+
+service TicketService {
+  rpc ListTickets(Empty) returns (TicketList);
+  rpc GetTicket(IDRequest) returns (Ticket);
+}
+
+service EmployeeService {
+  rpc ListEmployees(Empty) returns (EmployeeList);
+  rpc GetEmployee(IDRequest) returns (Employee);
+}
+
+service AttendanceService {
+  rpc ListAttendances(Empty) returns (AttendanceList);
+  rpc GetAttendance(IDRequest) returns (Attendance);
+}
+

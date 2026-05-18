@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-stone-100 text-slate-900 font-sans dark:bg-cinema-950 dark:text-slate-100;
+}
+
+.input {
+  @apply w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-cinema-500 focus:ring-2 focus:ring-cinema-100 dark:border-white/10 dark:bg-white/10 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:ring-cinema-900;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-md bg-cinema-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-cinema-900 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-cinema-300 hover:text-cinema-700 dark:border-white/10 dark:bg-white/10 dark:text-violet-100 dark:hover:bg-white/15 dark:hover:text-white;
+}
+
+.panel {
+  @apply rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-[#1f1730] dark:text-slate-100 dark:shadow-none;
+}
+
+.table-th {
+  @apply px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400;
+}
+
+.table-td {
+  @apply border-t border-slate-100 px-4 py-3 text-sm dark:border-white/10;
+}
+
+.dark .bg-white {
+  background-color: #1f1730;
+}
+
+.dark .bg-white\/80,
+.dark .bg-white\/90 {
+  background-color: rgba(31, 23, 48, 0.9);
+}
+
+.dark .bg-stone-100 {
+  background-color: #160820;
+}
+
+.dark .bg-slate-100 {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .bg-slate-200 {
+  background-color: rgba(255, 255, 255, 0.14);
+}
+
+.dark .border-slate-100,
+.dark .border-slate-200,
+.dark .border-slate-300 {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .text-cinema-950,
+.dark .text-cinema-900,
+.dark .text-slate-900,
+.dark .text-slate-700,
+.dark .text-slate-600 {
+  color: #f8fafc;
+}
+
+.dark .text-slate-500,
+.dark .text-slate-400 {
+  color: #cbd5e1;
+}
+
+.dark .shadow-sm,
+.dark .shadow-md,
+.dark .shadow-lg {
+  box-shadow: none;
+}
+
+.client-shell {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  color: #fefdfd;
+  background:
+    radial-gradient(circle at 50% 24%, rgba(95, 67, 178, 0.78), rgba(95, 67, 178, 0.16) 24%, transparent 42%),
+    radial-gradient(circle at 18% 16%, rgba(177, 174, 187, 0.18), transparent 28%),
+    radial-gradient(circle at 84% 18%, rgba(95, 67, 178, 0.35), transparent 24%),
+    linear-gradient(180deg, #241b45 0%, #3a3153 46%, #12091f 100%);
+}
+
+.client-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, rgba(254, 253, 253, 0.5) 0 1px, transparent 1.4px),
+    radial-gradient(circle, rgba(177, 174, 187, 0.35) 0 1px, transparent 1.3px);
+  background-position: 0 0, 28px 34px;
+  background-size: 78px 78px, 112px 112px;
+  opacity: 0.2;
+}
+
+.client-shell::after {
+  content: "";
+  position: fixed;
+  left: -10%;
+  right: -10%;
+  bottom: -18%;
+  height: 46vh;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(177, 174, 187, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(177, 174, 187, 0.13) 1px, transparent 1px),
+    radial-gradient(ellipse at top, rgba(95, 67, 178, 0.24), transparent 62%);
+  background-size: 100% 34px, 64px 100%, 100% 100%;
+  transform: perspective(520px) rotateX(58deg);
+  transform-origin: top;
+  opacity: 0.75;
+}
+
+.client-surface {
+  border: 1px solid rgba(177, 174, 187, 0.16);
+  background: linear-gradient(135deg, rgba(58, 49, 83, 0.7), rgba(1, 1, 1, 0.24));
+  box-shadow: 0 24px 80px rgba(1, 1, 1, 0.25), inset 0 1px 0 rgba(254, 253, 253, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.client-glow {
+  box-shadow: 0 0 0 1px rgba(254, 253, 253, 0.06), 0 0 34px rgba(95, 67, 178, 0.24);
+}
+
+.client-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(254, 253, 253, 0.16);
+  background: linear-gradient(135deg, rgba(95, 67, 178, 0.96), rgba(58, 49, 83, 0.86));
+  color: #fefdfd;
+  font-weight: 700;
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.client-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(254, 253, 253, 0.34);
+  box-shadow: 0 0 26px rgba(95, 67, 178, 0.38);
+}
