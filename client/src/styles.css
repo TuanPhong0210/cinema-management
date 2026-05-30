@@ -76,16 +76,53 @@ body {
   box-shadow: none;
 }
 
+:root {
+  --client-bg: #ffffff;
+  --client-text-primary: #1e293b;
+  --client-text-secondary: #64748b;
+  --client-surface-bg: linear-gradient(135deg, rgba(248, 250, 252, 0.95), rgba(255, 255, 255, 0.95));
+  --client-surface-border: rgba(95, 67, 178, 0.15);
+  --client-btn-bg: linear-gradient(135deg, #7c3aed, #5b21b6);
+  --client-btn-text: #ffffff;
+  --client-glow-shadow: 0 0 34px rgba(95, 67, 178, 0.1);
+  --client-grid-opacity: 0.05;
+}
+
+html.dark {
+  --client-bg: linear-gradient(180deg, #241b45 0%, #3a3153 46%, #12091f 100%);
+  --client-text-primary: #fefdfd;
+  --client-text-secondary: #b1aebb;
+  --client-surface-bg: linear-gradient(135deg, rgba(58, 49, 83, 0.7), rgba(1, 1, 1, 0.24));
+  --client-surface-border: rgba(177, 174, 187, 0.16);
+  --client-btn-bg: linear-gradient(135deg, rgba(95, 67, 178, 0.96), rgba(58, 49, 83, 0.86));
+  --client-btn-text: #fefdfd;
+  --client-glow-shadow: 0 0 34px rgba(95, 67, 178, 0.24);
+  --client-grid-opacity: 0.2;
+}
+
 .client-shell {
   position: relative;
   min-height: 100vh;
   overflow: hidden;
-  color: #fefdfd;
+  color: var(--client-text-primary);
+  background: var(--client-bg);
+}
+
+/* For dark mode background gradient with radial lights */
+html.dark .client-shell {
   background:
     radial-gradient(circle at 50% 24%, rgba(95, 67, 178, 0.78), rgba(95, 67, 178, 0.16) 24%, transparent 42%),
     radial-gradient(circle at 18% 16%, rgba(177, 174, 187, 0.18), transparent 28%),
     radial-gradient(circle at 84% 18%, rgba(95, 67, 178, 0.35), transparent 24%),
     linear-gradient(180deg, #241b45 0%, #3a3153 46%, #12091f 100%);
+}
+
+/* Light mode background with extremely soft purple radial glow */
+html:not(.dark) .client-shell {
+  background:
+    radial-gradient(circle at 50% 24%, rgba(124, 58, 237, 0.08), transparent 42%),
+    radial-gradient(circle at 18% 16%, rgba(124, 58, 237, 0.04), transparent 28%),
+    linear-gradient(180deg, #ffffff 0%, #fbfaff 100%);
 }
 
 .client-shell::before {
@@ -94,11 +131,10 @@ body {
   inset: 0;
   pointer-events: none;
   background-image:
-    radial-gradient(circle, rgba(254, 253, 253, 0.5) 0 1px, transparent 1.4px),
-    radial-gradient(circle, rgba(177, 174, 187, 0.35) 0 1px, transparent 1.3px);
-  background-position: 0 0, 28px 34px;
-  background-size: 78px 78px, 112px 112px;
-  opacity: 0.2;
+    radial-gradient(circle, rgba(124, 58, 237, 0.15) 0 1px, transparent 1.4px);
+  background-position: 0 0;
+  background-size: 78px 78px;
+  opacity: var(--client-grid-opacity);
 }
 
 .client-shell::after {
@@ -116,18 +152,21 @@ body {
   background-size: 100% 34px, 64px 100%, 100% 100%;
   transform: perspective(520px) rotateX(58deg);
   transform-origin: top;
-  opacity: 0.75;
+  opacity: var(--client-grid-opacity);
 }
 
 .client-surface {
-  border: 1px solid rgba(177, 174, 187, 0.16);
-  background: linear-gradient(135deg, rgba(58, 49, 83, 0.7), rgba(1, 1, 1, 0.24));
-  box-shadow: 0 24px 80px rgba(1, 1, 1, 0.25), inset 0 1px 0 rgba(254, 253, 253, 0.08);
+  border: 1px solid var(--client-surface-border);
+  background: var(--client-surface-bg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(18px);
+}
+html.dark .client-surface {
+  box-shadow: 0 24px 80px rgba(1, 1, 1, 0.25), inset 0 1px 0 rgba(254, 253, 253, 0.08);
 }
 
 .client-glow {
-  box-shadow: 0 0 0 1px rgba(254, 253, 253, 0.06), 0 0 34px rgba(95, 67, 178, 0.24);
+  box-shadow: 0 0 0 1px var(--client-surface-border), var(--client-glow-shadow);
 }
 
 .client-btn {
@@ -137,14 +176,14 @@ body {
   gap: 0.5rem;
   border-radius: 999px;
   border: 1px solid rgba(254, 253, 253, 0.16);
-  background: linear-gradient(135deg, rgba(95, 67, 178, 0.96), rgba(58, 49, 83, 0.86));
-  color: #fefdfd;
+  background: var(--client-btn-bg);
+  color: var(--client-btn-text);
   font-weight: 700;
   transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
 }
 
 .client-btn:hover {
   transform: translateY(-1px);
-  border-color: rgba(254, 253, 253, 0.34);
-  box-shadow: 0 0 26px rgba(95, 67, 178, 0.38);
+  border-color: rgba(124, 58, 237, 0.34);
+  box-shadow: 0 0 26px rgba(124, 58, 237, 0.38);
 }

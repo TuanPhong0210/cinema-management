@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faCalendarDay, faClock, faMoneyBillWave, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faCalendarDay, faClock, faFilm } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import BookingSteps from '../../components/client/BookingSteps';
@@ -27,10 +27,39 @@ export default function ShowtimeSelectPage() {
   const visible = showtimes.filter((s) => !date || s.showDate === date);
   const movie = showtimes[0]?.movie;
 
+  const groupedCinemas = useMemo(() => {
+    const groups = {};
+    visible.forEach((s) => {
+      const roomName = s.room?.name || '';
+      let cinemaName = 'Violet Cinema';
+      let hallName = roomName;
+      if (roomName.includes(' - ')) {
+        const parts = roomName.split(' - ');
+        cinemaName = parts[0];
+        hallName = parts[1];
+      }
+
+      if (!groups[cinemaName]) {
+        groups[cinemaName] = {};
+      }
+
+      const screenType = s.room?.screenType || '2D';
+      if (!groups[cinemaName][screenType]) {
+        groups[cinemaName][screenType] = [];
+      }
+
+      groups[cinemaName][screenType].push({
+        ...s,
+        hallName
+      });
+    });
+    return groups;
+  }, [visible]);
+
   return (
     <>
       <BookingSteps current={2} />
-      <Link to="/" className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-pearl/15 bg-brand-black/20 px-4 py-2 text-sm font-bold text-brand-pearl backdrop-blur transition hover:border-brand-studio hover:text-brand-peach"><FontAwesomeIcon icon={faArrowLeft} /> Back to movies</Link>
+      <Link to="/" className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-pearl/15 bg-brand-black/20 px-4 py-2 text-sm font-bold text-brand-pearl backdrop-blur transition hover:border-brand-studio hover:text-brand-peach"><FontAwesomeIcon icon={faArrowLeft} /> Quay lại danh sách phim</Link>
 
       {loading && <div className="h-72 animate-pulse rounded-lg bg-brand-black/30" />}
       {error && <EmptyState title="Cannot load showtimes" text={error} />}
@@ -38,37 +67,54 @@ export default function ShowtimeSelectPage() {
 
       {!loading && !error && movie && (
         <>
-          <section className="client-surface mb-6 grid overflow-hidden rounded-[24px] lg:grid-cols-[280px_1fr]">
-            <img src={movie.posterUrl} alt={movie.title} className="h-72 w-full object-cover lg:h-full" />
+          <section className="client-surface mb-6 grid overflow-hidden rounded-[24px] lg:grid-cols-[320px_1fr]">
+            <div className="relative aspect-[4/3] lg:aspect-video">
+              <img src={movie.posterUrl} alt={movie.title} className="h-full w-full object-cover" />
+            </div>
             <div className="p-6">
-              <p className="text-sm font-bold uppercase tracking-[0.18em] text-brand-studio">Select Showtime</p>
-              <h1 className="mt-2 text-3xl font-extrabold text-brand-peach">{movie.title}</h1>
-              <p className="mt-2 text-sm font-semibold text-brand-pearl">{movie.genre} · {movie.durationMinutes} min</p>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-studio mb-1">Đang Chiếu</p>
+              <h1 className="text-3xl font-extrabold text-brand-peach leading-tight">{movie.title}</h1>
+              <p className="mt-2 text-xs font-semibold text-brand-pearl bg-brand-studio/10 w-fit px-2.5 py-1 rounded-full">{movie.genre} · {movie.durationMinutes} Phút</p>
               <p className="mt-4 max-w-2xl text-sm leading-6 text-brand-pearl/90">{movie.description}</p>
             </div>
           </section>
 
-          <div className="mb-5 flex flex-wrap gap-2">
+          <div className="mb-6 flex flex-wrap gap-2">
             {dates.map((item) => (
-              <button key={item} onClick={() => setDate(item)} className={item === date ? 'inline-flex items-center justify-center gap-2 rounded-full bg-brand-studio px-4 py-2.5 text-sm font-semibold text-brand-peach shadow-[0_0_22px_rgba(95,67,178,0.34)] transition hover:bg-brand-studio/80' : 'inline-flex items-center justify-center gap-2 rounded-full border border-brand-pearl/20 bg-brand-black/20 px-4 py-2.5 text-sm font-semibold text-brand-pearl backdrop-blur transition hover:border-brand-studio hover:text-brand-peach'}>
+              <button key={item} onClick={() => setDate(item)} className={item === date ? 'inline-flex items-center justify-center gap-2 rounded-full bg-brand-studio px-4 py-2.5 text-sm font-semibold text-brand-peach shadow-[0_0_22px_rgba(95,67,178,0.34)] transition hover:bg-brand-studio/80' : 'inline-flex items-center justify-center gap-2 rounded-full border border-brand-pearl/20 bg-brand-black/10 px-4 py-2.5 text-sm font-semibold text-brand-pearl backdrop-blur transition hover:border-brand-studio hover:text-brand-peach'}>
                 <FontAwesomeIcon icon={faCalendarDay} /> {new Date(`${item}T00:00:00`).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
               </button>
             ))}
           </div>
 
-          {visible.length === 0 ? <EmptyState title="No showtimes on this date" text="Pick another date to continue booking." /> : (
-            <div className="grid gap-4 md:grid-cols-2">
-              {visible.map((s) => (
-                <Link key={s.id} to={`/showtimes/${s.id}/seats`} className="client-surface block rounded-[20px] p-5 transition hover:-translate-y-1 hover:border-brand-studio/70 hover:shadow-[0_22px_70px_rgba(95,67,178,0.28)]">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h2 className="text-xl font-extrabold text-brand-peach"><FontAwesomeIcon icon={faClock} className="mr-2 text-brand-studio" />{s.startTime} - {s.endTime}</h2>
-                      <p className="mt-3 text-sm font-semibold text-brand-pearl"><FontAwesomeIcon icon={faVideo} className="mr-2 text-brand-studio" />{s.room?.name} · {s.room?.screenType}</p>
-                    </div>
-                    <span className="rounded-full border border-brand-pearl/15 bg-brand-studio/25 px-3 py-1 text-xs font-bold text-brand-peach">{s.room?.screenType}</span>
+          {Object.keys(groupedCinemas).length === 0 ? (
+            <EmptyState title="Không có lịch chiếu vào ngày này" text="Vui lòng chọn ngày khác để tiếp tục đặt vé." />
+          ) : (
+            <div className="space-y-6">
+              {Object.entries(groupedCinemas).map(([cinemaName, screens]) => (
+                <div key={cinemaName} className="client-surface rounded-2xl p-5 shadow-sm">
+                  <h2 className="text-lg font-extrabold text-brand-peach border-b border-brand-pearl/10 pb-3 mb-4">
+                    <FontAwesomeIcon icon={faFilm} className="mr-2.5 text-brand-studio" />
+                    {cinemaName}
+                  </h2>
+                  <div className="space-y-4">
+                    {Object.entries(screens).map(([screenType, list]) => (
+                      <div key={screenType} className="grid items-start gap-4 sm:grid-cols-[80px_1fr]">
+                        <span className="mt-1 flex w-16 justify-center rounded-md bg-brand-studio/15 border border-brand-studio/20 px-2 py-1 text-[11px] font-bold text-brand-studio uppercase tracking-wider">
+                          {screenType}
+                        </span>
+                        <div className="flex flex-wrap gap-3">
+                          {list.map((s) => (
+                            <Link key={s.id} to={`/showtimes/${s.id}/seats`} className="flex flex-col items-center justify-center rounded-xl border border-brand-pearl/20 hover:border-brand-studio hover:bg-brand-studio/10 px-4 py-2.5 transition text-center min-w-[100px] hover:scale-[1.03]">
+                              <strong className="text-sm font-extrabold text-brand-peach">{s.startTime}</strong>
+                              <span className="text-[10px] font-bold text-brand-pearl mt-0.5">{(s.ticketPrice / 1000).toFixed(0)}k VND</span>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <p className="mt-5 font-extrabold text-brand-studio"><FontAwesomeIcon icon={faMoneyBillWave} className="mr-2" />{Number(s.ticketPrice).toLocaleString()} VND</p>
-                </Link>
+                </div>
               ))}
             </div>
           )}

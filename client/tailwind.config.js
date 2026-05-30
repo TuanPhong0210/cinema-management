@@ -17,8 +17,8 @@ export default {
         brand: {
           black: '#010101',
           studio: '#5f43b2',
-          peach: '#fefdfd',
-          pearl: '#b1aebb',
+          peach: 'var(--client-text-primary)',
+          pearl: 'var(--client-text-secondary)',
           martinique: '#3a3153'
         }
       }

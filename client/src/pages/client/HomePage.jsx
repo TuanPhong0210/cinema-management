@@ -59,11 +59,11 @@ export default function HomePage() {
         </div>
       </div>
 
-      {loading && <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{[1, 2, 3].map((item) => <div key={item} className="h-[460px] animate-pulse rounded-lg bg-brand-black/30" />)}</div>}
+      {loading && <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">{[1, 2, 3, 4, 5, 6].map((item) => <div key={item} className="aspect-[2/3] animate-pulse rounded-2xl bg-brand-black/20" />)}</div>}
       {error && <EmptyState title="Cannot load movies" text={error} />}
       {!loading && !error && filtered.length === 0 && <EmptyState title="No movies match your search" text="Try a different title or genre filter." />}
       {!loading && !error && filtered.length > 0 && (
-        <div id="movie-grid" className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div id="movie-grid" className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
           {filtered.map((movie) => <MovieCard key={movie.id} movie={movie} />)}
         </div>
       )}
