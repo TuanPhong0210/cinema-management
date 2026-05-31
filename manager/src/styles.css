@@ -2,8 +2,137 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-stone-100 text-slate-900 font-sans dark:bg-cinema-950 dark:text-slate-100;
+@layer base {
+  body {
+    @apply bg-[#15121b] text-[#e7e0ed] font-sans overflow-x-hidden;
+    background-color: #15121b;
+    color: #e7e0ed;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #15121b;
+}
+::-webkit-scrollbar-thumb {
+  background: #444173;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #5b579c;
+}
+
+/* Glassmorphic panels */
+.glass-panel, .glass {
+  background: rgba(33, 30, 39, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-panel:hover, .glass:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 40px -10px rgba(208, 188, 255, 0.15);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Cyber Inputs & Selects */
+.cyber-input {
+  background: rgba(21, 18, 27, 0.8) !important;
+  border: 1px solid rgba(148, 143, 154, 0.3) !important;
+  color: #e7e0ed !important;
+  transition: all 0.3s ease;
+}
+.cyber-input:focus {
+  border-color: #8b5cf6 !important;
+  box-shadow: 0 0 15px rgba(208, 188, 255, 0.2) !important;
+  outline: none !important;
+}
+
+/* Role & Status Chips */
+.role-chip-manager {
+  background: rgba(208, 188, 255, 0.15);
+  color: #d0bcff;
+  border: 1px solid rgba(208, 188, 255, 0.3);
+}
+.role-chip-ticket {
+  background: rgba(255, 220, 188, 0.15);
+  color: #ffdcbb;
+  border: 1px solid rgba(255, 220, 188, 0.3);
+}
+.status-working {
+  color: #34d399;
+}
+.status-leave {
+  color: #ffb4ab;
+}
+.status-off {
+  color: #948f9a;
+}
+
+/* Navigation items active effect */
+.sidebar-active-pill {
+  position: relative;
+}
+.sidebar-active-pill::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 24px;
+  background: #d0bcff;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Typography typography scales */
+.font-display-lg {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 56px;
+  letter-spacing: -0.02em;
+}
+.font-headline-md {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 38px;
+}
+.font-headline-sm {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+}
+.font-body-lg {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 28px;
+}
+.font-body-md {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+.font-label-md {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.05em;
+}
+.font-label-sm {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
 }
 
 .input {
@@ -28,123 +157,4 @@ body {
 
 .table-td {
   @apply border-t border-slate-100 px-4 py-3 text-sm dark:border-white/10;
-}
-
-.dark .bg-white {
-  background-color: #1f1730;
-}
-
-.dark .bg-white\/80,
-.dark .bg-white\/90 {
-  background-color: rgba(31, 23, 48, 0.9);
-}
-
-.dark .bg-stone-100 {
-  background-color: #160820;
-}
-
-.dark .bg-slate-100 {
-  background-color: rgba(255, 255, 255, 0.08);
-}
-
-.dark .bg-slate-200 {
-  background-color: rgba(255, 255, 255, 0.14);
-}
-
-.dark .border-slate-100,
-.dark .border-slate-200,
-.dark .border-slate-300 {
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-.dark .text-cinema-950,
-.dark .text-cinema-900,
-.dark .text-slate-900,
-.dark .text-slate-700,
-.dark .text-slate-600 {
-  color: #f8fafc;
-}
-
-.dark .text-slate-500,
-.dark .text-slate-400 {
-  color: #cbd5e1;
-}
-
-.dark .shadow-sm,
-.dark .shadow-md,
-.dark .shadow-lg {
-  box-shadow: none;
-}
-
-.client-shell {
-  position: relative;
-  min-height: 100vh;
-  overflow: hidden;
-  color: #fefdfd;
-  background:
-    radial-gradient(circle at 50% 24%, rgba(95, 67, 178, 0.78), rgba(95, 67, 178, 0.16) 24%, transparent 42%),
-    radial-gradient(circle at 18% 16%, rgba(177, 174, 187, 0.18), transparent 28%),
-    radial-gradient(circle at 84% 18%, rgba(95, 67, 178, 0.35), transparent 24%),
-    linear-gradient(180deg, #241b45 0%, #3a3153 46%, #12091f 100%);
-}
-
-.client-shell::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    radial-gradient(circle, rgba(254, 253, 253, 0.5) 0 1px, transparent 1.4px),
-    radial-gradient(circle, rgba(177, 174, 187, 0.35) 0 1px, transparent 1.3px);
-  background-position: 0 0, 28px 34px;
-  background-size: 78px 78px, 112px 112px;
-  opacity: 0.2;
-}
-
-.client-shell::after {
-  content: "";
-  position: fixed;
-  left: -10%;
-  right: -10%;
-  bottom: -18%;
-  height: 46vh;
-  pointer-events: none;
-  background:
-    linear-gradient(rgba(177, 174, 187, 0.15) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(177, 174, 187, 0.13) 1px, transparent 1px),
-    radial-gradient(ellipse at top, rgba(95, 67, 178, 0.24), transparent 62%);
-  background-size: 100% 34px, 64px 100%, 100% 100%;
-  transform: perspective(520px) rotateX(58deg);
-  transform-origin: top;
-  opacity: 0.75;
-}
-
-.client-surface {
-  border: 1px solid rgba(177, 174, 187, 0.16);
-  background: linear-gradient(135deg, rgba(58, 49, 83, 0.7), rgba(1, 1, 1, 0.24));
-  box-shadow: 0 24px 80px rgba(1, 1, 1, 0.25), inset 0 1px 0 rgba(254, 253, 253, 0.08);
-  backdrop-filter: blur(18px);
-}
-
-.client-glow {
-  box-shadow: 0 0 0 1px rgba(254, 253, 253, 0.06), 0 0 34px rgba(95, 67, 178, 0.24);
-}
-
-.client-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  border-radius: 999px;
-  border: 1px solid rgba(254, 253, 253, 0.16);
-  background: linear-gradient(135deg, rgba(95, 67, 178, 0.96), rgba(58, 49, 83, 0.86));
-  color: #fefdfd;
-  font-weight: 700;
-  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
-}
-
-.client-btn:hover {
-  transform: translateY(-1px);
-  border-color: rgba(254, 253, 253, 0.34);
-  box-shadow: 0 0 26px rgba(95, 67, 178, 0.38);
 }

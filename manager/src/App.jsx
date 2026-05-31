@@ -9,6 +9,8 @@ import ShowtimesPage from './pages/manager/ShowtimesPage';
 import TicketsPage from './pages/manager/TicketsPage';
 import EmployeesPage from './pages/manager/EmployeesPage';
 import AttendancePage from './pages/manager/AttendancePage';
+import ComboPage from './pages/manager/ComboPage';
+import DiscountPage from './pages/manager/DiscountPage';
 
 export default function App() {
   return (
@@ -22,6 +24,8 @@ export default function App() {
           <Route path="showtimes" element={<ShowtimesPage />} />
           <Route path="tickets" element={<TicketsPage />} />
           <Route path="employees" element={<EmployeesPage />} />
+          <Route path="combos" element={<ComboPage />} />
+          <Route path="discounts" element={<DiscountPage />} />
           <Route path="attendance" element={<AttendancePage />} />
         </Route>
       </Route>
