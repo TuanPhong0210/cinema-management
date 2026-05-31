@@ -72,6 +72,7 @@ type Ticket struct {
 	ID           uint         `gorm:"primaryKey" json:"id"`
 	ShowtimeID   uint         `json:"showtimeId"`
 	Showtime     Showtime     `json:"showtime"`
+	UserID       *uint        `json:"userId"`
 	CustomerName *string      `json:"customerName"`
 	TotalPrice   float64      `json:"totalPrice"`
 	Status       string       `json:"status"`
@@ -109,4 +110,15 @@ type Attendance struct {
 	ClockOutTime *time.Time `json:"clockOutTime"`
 	CreatedAt    time.Time  `json:"createdAt"`
 	UpdatedAt    time.Time  `json:"updatedAt"`
+}
+
+type User struct {
+	ID           uint      `gorm:"primaryKey" json:"id"`
+	FullName     string    `json:"fullName" gorm:"not null"`
+	Email        string    `gorm:"uniqueIndex;not null" json:"email"`
+	PasswordHash string    `json:"-" gorm:"not null"`
+	Phone        string    `json:"phone"`
+	Role         string    `json:"role" gorm:"default:'Thành viên V.I.P'"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
 }

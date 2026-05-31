@@ -153,9 +153,9 @@ export default function SeatSelectPage() {
           </Link>
 
           <section className="client-surface mb-5 rounded-[20px] p-5">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-studio">Chọn Ghế</p>
-            <h1 className="mt-1 text-2xl font-extrabold text-brand-peach leading-tight">{showtime?.movie?.title}</h1>
-            <div className="mt-4 grid gap-3 text-xs font-bold text-brand-pearl sm:grid-cols-3">
+            <p className="text-xs font-display font-black uppercase tracking-[0.25em] text-brand-studio">Chọn Ghế</p>
+            <h1 className="mt-1.5 text-2xl font-display font-extrabold text-brand-peach leading-tight">{showtime?.movie?.title}</h1>
+            <div className="mt-4 grid gap-3 text-xs font-semibold text-brand-pearl sm:grid-cols-3">
               <span><FontAwesomeIcon icon={faCalendarDay} className="mr-2 text-brand-studio" />{formattedDate}</span>
               <span><FontAwesomeIcon icon={faClock} className="mr-2 text-brand-studio" />{showtime?.startTime}</span>
               <span><FontAwesomeIcon icon={faVideo} className="mr-2 text-brand-studio" />{parsedTheater.cinemaName} · {parsedTheater.hallName}</span>
@@ -164,10 +164,10 @@ export default function SeatSelectPage() {
 
           <div className="grid gap-5 lg:grid-cols-[1fr_340px]">
             <div className="client-surface overflow-x-auto rounded-[20px] p-6 flex flex-col items-center">
-              <div className="mb-6 flex gap-4 text-xs font-extrabold text-brand-pearl">
+              <div className="mb-6 flex gap-4 text-xs font-bold text-brand-pearl">
                 <span className="flex items-center gap-1.5"><span className="h-3 w-3 rounded bg-brand-pearl/20 border border-brand-pearl/30" /> Trống ({availableCount})</span>
                 <span className="flex items-center gap-1.5"><span className="h-3 w-3 rounded bg-pink-500/30 border border-pink-500/50" /> Đã đặt ({bookedCount})</span>
-                <span className="flex items-center gap-1.5"><span className="h-3 w-3 rounded bg-brand-studio shadow-[0_0_8px_rgba(95,67,178,0.7)]" /> Bạn chọn ({selected.length})</span>
+                <span className="flex items-center gap-1.5"><span className="h-3 w-3 rounded bg-brand-studio shadow-[0_0_8px_rgba(139,92,246,0.7)]" /> Bạn chọn ({selected.length})</span>
               </div>
               <div className="w-full min-w-[500px]">
                 <SeatMap seats={seats} selected={selected} onToggle={toggleSeat} />
@@ -175,15 +175,15 @@ export default function SeatSelectPage() {
             </div>
             
             <aside className="client-surface h-fit rounded-[20px] p-5 lg:sticky lg:top-24">
-              <h2 className="font-extrabold text-brand-peach border-b border-brand-pearl/10 pb-3 mb-4">
+              <h2 className="font-display font-extrabold tracking-wide text-brand-peach border-b border-brand-pearl/10 pb-3 mb-4">
                 <FontAwesomeIcon icon={faTicket} className="mr-2 text-brand-studio" />
                 Tóm Tắt Đặt Vé
               </h2>
-              <p className="text-xs font-bold text-brand-pearl uppercase tracking-wider">Ghế đã chọn</p>
+              <p className="text-xs font-display font-bold text-brand-pearl uppercase tracking-wider">Ghế đã chọn</p>
               <div className="mt-2 flex min-h-[40px] flex-wrap gap-2">
                 {selectedSeats.length ? (
                   selectedSeats.map((seat) => (
-                    <span key={seat.id} className="rounded-md bg-brand-studio px-2.5 py-1 text-xs font-extrabold text-white shadow-md">
+                    <span key={seat.id} className="rounded bg-brand-studio px-2.5 py-1 text-xs font-display font-black text-white shadow-md">
                       {seat.seat.seatCode}
                     </span>
                   ))
@@ -197,12 +197,12 @@ export default function SeatSelectPage() {
                 <div className="flex justify-between"><span className="text-brand-pearl">Số lượng ghế</span><strong className="text-brand-peach">{selected.length}</strong></div>
               </div>
               <div className="my-5 border-t border-brand-pearl/10" />
-              <p className="text-xs font-bold text-brand-pearl uppercase tracking-wider">Tạm tính</p>
-              <p className="text-2xl font-extrabold text-brand-studio mt-1">{ticketCost.toLocaleString()}đ</p>
+              <p className="text-xs font-display font-bold text-brand-pearl uppercase tracking-wider">Tạm tính</p>
+              <p className="text-2xl font-display font-black text-brand-studio mt-1">{ticketCost.toLocaleString()}đ</p>
               <button
                 disabled={!selected.length}
                 onClick={() => setView('combos')}
-                className="client-btn mt-5 w-full py-3.5 text-xs uppercase tracking-wider font-extrabold disabled:cursor-not-allowed disabled:opacity-50"
+                className="client-btn mt-5 w-full py-3.5 text-xs font-display uppercase tracking-widest font-extrabold disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Chọn Bắp & Nước
               </button>
@@ -307,11 +307,11 @@ export default function SeatSelectPage() {
                 <div className="flex justify-between"><span className="text-brand-pearl">Tiền bắp nước</span><strong className="text-brand-peach">{comboCost.toLocaleString()}đ</strong></div>
               </div>
               <div className="my-5 border-t border-brand-pearl/10" />
-              <p className="text-xs font-bold text-brand-pearl uppercase tracking-wider">Tổng cộng</p>
-              <p className="text-2xl font-extrabold text-brand-studio mt-1">{total.toLocaleString()}đ</p>
+              <p className="text-xs font-display font-bold text-brand-pearl uppercase tracking-wider">Tổng cộng</p>
+              <p className="text-2xl font-display font-black text-brand-studio mt-1">{total.toLocaleString()}đ</p>
               <button
                 onClick={() => setView('payment')}
-                className="client-btn mt-5 w-full py-3.5 text-xs uppercase tracking-wider font-extrabold"
+                className="client-btn mt-5 w-full py-3.5 text-xs font-display uppercase tracking-widest font-extrabold"
               >
                 Tiếp Tục Thanh Toán
               </button>
@@ -325,12 +325,12 @@ export default function SeatSelectPage() {
         <>
           <button
             onClick={() => setView('combos')}
-            className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-pearl/15 bg-brand-black/20 px-4 py-2 text-sm font-bold text-brand-pearl backdrop-blur transition hover:border-brand-studio hover:text-brand-peach"
+            className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-pearl/15 bg-brand-black/20 px-4 py-2 text-sm font-display font-bold text-brand-pearl backdrop-blur transition hover:border-brand-studio hover:text-brand-peach"
           >
             <FontAwesomeIcon icon={faArrowLeft} /> Quay lại chọn combo
           </button>
 
-          <h1 className="text-2xl font-extrabold text-brand-peach mb-6 flex items-center gap-2.5">
+          <h1 className="text-2xl font-display font-black tracking-wide text-brand-peach mb-6 flex items-center gap-2.5 uppercase">
             <FontAwesomeIcon icon={faCreditCard} className="text-brand-studio" />
             Thanh Toán
           </h1>
@@ -345,26 +345,26 @@ export default function SeatSelectPage() {
                   <img
                     src={showtime?.movie?.posterUrl}
                     alt={showtime?.movie?.title}
-                    className="w-32 aspect-[4/3] object-cover rounded-xl border border-brand-pearl/10 shadow"
+                    className="w-24 aspect-[2/3] object-cover rounded-xl border border-brand-pearl/10 shadow animate-fade-in"
                   />
                   <div className="flex-grow space-y-3">
                     <div className="flex items-center gap-2.5 flex-wrap">
-                      <h2 className="text-lg font-extrabold text-brand-peach leading-tight">{showtime?.movie?.title}</h2>
-                      <span className="rounded bg-brand-studio px-2 py-0.5 text-[10px] font-bold text-white shadow-sm uppercase">C13</span>
+                      <h2 className="text-lg font-display font-extrabold text-brand-peach leading-tight">{showtime?.movie?.title}</h2>
+                      <span className="rounded bg-brand-studio px-2 py-0.5 text-[10px] font-display font-black text-white shadow-sm uppercase tracking-wider">C13</span>
                     </div>
                     
                     <div className="grid gap-4 grid-cols-2 text-xs font-semibold text-brand-peach border-t border-brand-pearl/10 pt-3">
                       <div>
                         <p className="text-[10px] text-brand-pearl uppercase tracking-wider font-bold">Thời gian</p>
-                        <strong className="mt-1 block text-brand-peach">{showtime?.startTime} · {formattedDate}</strong>
+                        <strong className="mt-1 block text-brand-peach font-display font-bold">{showtime?.startTime} · {formattedDate}</strong>
                       </div>
                       <div>
                         <p className="text-[10px] text-brand-pearl uppercase tracking-wider font-bold">Rạp</p>
-                        <strong className="mt-1 block text-brand-peach">{parsedTheater.cinemaName} · {parsedTheater.hallName}</strong>
+                        <strong className="mt-1 block text-brand-peach font-display font-bold">{parsedTheater.cinemaName} · {parsedTheater.hallName}</strong>
                       </div>
                       <div>
                         <p className="text-[10px] text-brand-pearl uppercase tracking-wider font-bold">Ghế</p>
-                        <strong className="mt-1 block text-brand-peach">
+                        <strong className="mt-1 block text-brand-peach font-display font-bold">
                           {selectedSeats.map((s) => s.seat.seatCode).join(', ')} (VIP)
                         </strong>
                       </div>
@@ -385,18 +385,18 @@ export default function SeatSelectPage() {
 
               {/* Payment Methods Grid */}
               <div className="space-y-4">
-                <h3 className="text-base font-extrabold text-brand-peach">Phương Thức Thanh Toán</h3>
+                <h3 className="text-base font-display font-bold tracking-wide text-brand-peach">Phương Thức Thanh Toán</h3>
                 <div className="grid gap-4 sm:grid-cols-2">
                   
                   {/* Momo Card */}
                   <label
                     onClick={() => setPaymentMethod('momo')}
-                    className={`flex items-center justify-between gap-4 p-4 rounded-xl border transition cursor-pointer select-none ${paymentMethod === 'momo' ? 'border-brand-studio bg-brand-studio/10 shadow-[0_0_15px_rgba(95,67,178,0.15)]' : 'border-brand-pearl/10 bg-brand-black/5 dark:bg-white/5 hover:border-brand-studio/50'}`}
+                    className={`flex items-center justify-between gap-4 p-4 rounded-xl border transition cursor-pointer select-none ${paymentMethod === 'momo' ? 'border-brand-studio bg-brand-studio/10 shadow-[0_0_15px_rgba(139,92,246,0.18)]' : 'border-brand-pearl/10 bg-brand-black/5 dark:bg-white/5 hover:border-brand-studio/50'}`}
                   >
                     <div className="flex items-center gap-3">
                       <span className="h-10 w-10 rounded-lg bg-[#a50064] text-white flex items-center justify-center font-extrabold text-sm shadow">MoMo</span>
                       <div>
-                        <strong className="text-sm font-extrabold text-brand-peach block">Ví điện tử MoMo</strong>
+                        <strong className="text-sm font-extrabold text-brand-peach block font-display">Ví điện tử MoMo</strong>
                         <span className="text-[10px] text-brand-pearl font-bold">Thanh toán nhanh qua ứng dụng</span>
                       </div>
                     </div>
@@ -408,12 +408,12 @@ export default function SeatSelectPage() {
                   {/* International Cards (Visa/Mastercard) */}
                   <label
                     onClick={() => setPaymentMethod('card')}
-                    className={`flex items-center justify-between gap-4 p-4 rounded-xl border transition cursor-pointer select-none ${paymentMethod === 'card' ? 'border-brand-studio bg-brand-studio/10 shadow-[0_0_15px_rgba(95,67,178,0.15)]' : 'border-brand-pearl/10 bg-brand-black/5 dark:bg-white/5 hover:border-brand-studio/50'}`}
+                    className={`flex items-center justify-between gap-4 p-4 rounded-xl border transition cursor-pointer select-none ${paymentMethod === 'card' ? 'border-brand-studio bg-brand-studio/10 shadow-[0_0_15px_rgba(139,92,246,0.18)]' : 'border-brand-pearl/10 bg-brand-black/5 dark:bg-white/5 hover:border-brand-studio/50'}`}
                   >
                     <div className="flex items-center gap-3">
                       <span className="h-10 w-10 rounded-lg bg-brand-studio/10 border border-brand-studio/15 text-brand-studio flex items-center justify-center font-bold text-lg shadow">💳</span>
                       <div>
-                        <strong className="text-sm font-extrabold text-brand-peach block">Thẻ Quốc Tế</strong>
+                        <strong className="text-sm font-extrabold text-brand-peach block font-display">Thẻ Quốc Tế</strong>
                         <span className="text-[10px] text-brand-pearl font-bold">Visa, Mastercard, JCB</span>
                       </div>
                     </div>
@@ -425,12 +425,12 @@ export default function SeatSelectPage() {
                   {/* Apple Pay */}
                   <label
                     onClick={() => setPaymentMethod('applepay')}
-                    className={`flex items-center justify-between gap-4 p-4 rounded-xl border transition cursor-pointer select-none ${paymentMethod === 'applepay' ? 'border-brand-studio bg-brand-studio/10 shadow-[0_0_15px_rgba(95,67,178,0.15)]' : 'border-brand-pearl/10 bg-brand-black/5 dark:bg-white/5 hover:border-brand-studio/50'}`}
+                    className={`flex items-center justify-between gap-4 p-4 rounded-xl border transition cursor-pointer select-none ${paymentMethod === 'applepay' ? 'border-brand-studio bg-brand-studio/10 shadow-[0_0_15px_rgba(139,92,246,0.18)]' : 'border-brand-pearl/10 bg-brand-black/5 dark:bg-white/5 hover:border-brand-studio/50'}`}
                   >
                     <div className="flex items-center gap-3">
                       <span className="h-10 w-10 rounded-lg bg-black text-white flex items-center justify-center font-bold text-sm shadow">🍏 Pay</span>
                       <div>
-                        <strong className="text-sm font-extrabold text-brand-peach block">Apple Pay</strong>
+                        <strong className="text-sm font-extrabold text-brand-peach block font-display">Apple Pay</strong>
                         <span className="text-[10px] text-brand-pearl font-bold">Bảo mật bằng FaceID/TouchID</span>
                       </div>
                     </div>
@@ -442,12 +442,12 @@ export default function SeatSelectPage() {
                   {/* ATM / Bank Transfer */}
                   <label
                     onClick={() => setPaymentMethod('atm')}
-                    className={`flex items-center justify-between gap-4 p-4 rounded-xl border transition cursor-pointer select-none ${paymentMethod === 'atm' ? 'border-brand-studio bg-brand-studio/10 shadow-[0_0_15px_rgba(95,67,178,0.15)]' : 'border-brand-pearl/10 bg-brand-black/5 dark:bg-white/5 hover:border-brand-studio/50'}`}
+                    className={`flex items-center justify-between gap-4 p-4 rounded-xl border transition cursor-pointer select-none ${paymentMethod === 'atm' ? 'border-brand-studio bg-brand-studio/10 shadow-[0_0_15px_rgba(139,92,246,0.18)]' : 'border-brand-pearl/10 bg-brand-black/5 dark:bg-white/5 hover:border-brand-studio/50'}`}
                   >
                     <div className="flex items-center gap-3">
                       <span className="h-10 w-10 rounded-lg bg-brand-studio/10 border border-brand-studio/15 text-brand-studio flex items-center justify-center font-bold text-lg shadow">🏛️</span>
                       <div>
-                        <strong className="text-sm font-extrabold text-brand-peach block">Chuyển khoản / ATM</strong>
+                        <strong className="text-sm font-extrabold text-brand-peach block font-display">Chuyển khoản / ATM</strong>
                         <span className="text-[10px] text-brand-pearl font-bold">Napas, QR Ngân hàng</span>
                       </div>
                     </div>
@@ -463,14 +463,14 @@ export default function SeatSelectPage() {
 
             {/* Right Column: Sticky Order Summary breakdown */}
             <aside className="client-surface h-fit rounded-2xl p-5 lg:sticky lg:top-24 flex flex-col">
-              <h3 className="font-extrabold text-brand-peach border-b border-brand-pearl/10 pb-3 mb-4 text-base">
+              <h3 className="font-display font-extrabold tracking-wide text-brand-peach border-b border-brand-pearl/10 pb-3 mb-4 text-base">
                 Tóm tắt đơn hàng
               </h3>
               
               <div className="space-y-3 text-xs font-semibold text-brand-peach">
                 <div className="flex justify-between items-center">
                   <span className="text-brand-pearl">Vé xem phim ({selected.length}x)</span>
-                  <strong>{ticketCost.toLocaleString()}đ</strong>
+                  <strong className="font-display">{ticketCost.toLocaleString()}đ</strong>
                 </div>
 
                 {Object.entries(combos).map(([cId, qty]) => {
@@ -479,14 +479,14 @@ export default function SeatSelectPage() {
                   return (
                     <div key={cId} className="flex justify-between items-center">
                       <span className="text-brand-pearl">{c?.name} ({qty}x)</span>
-                      <strong>{(c?.price * qty).toLocaleString()}đ</strong>
+                      <strong className="font-display">{(c?.price * qty).toLocaleString()}đ</strong>
                     </div>
                   );
                 })}
 
                 <div className="flex justify-between items-center">
                   <span className="text-brand-pearl">Phí dịch vụ</span>
-                  <strong>0đ</strong>
+                  <strong className="font-display">0đ</strong>
                 </div>
               </div>
 
@@ -494,10 +494,10 @@ export default function SeatSelectPage() {
 
               <div className="flex justify-between items-end mb-4">
                 <div>
-                  <span className="text-xs font-bold text-brand-pearl uppercase tracking-wider block">Tổng cộng</span>
+                  <span className="text-xs font-display font-bold text-brand-pearl uppercase tracking-wider block">Tổng cộng</span>
                   <span className="text-[10px] text-brand-pearl/70 italic mt-0.5 block">Đã bao gồm VAT</span>
                 </div>
-                <strong className="text-2xl font-extrabold text-brand-studio">{total.toLocaleString()}đ</strong>
+                <strong className="text-2xl font-display font-black text-brand-studio">{total.toLocaleString()}đ</strong>
               </div>
 
               {error && <p className="mb-4 rounded bg-pink-50 dark:bg-pink-950/20 px-3 py-2 text-xs font-bold text-pink-700 dark:text-pink-400">{error}</p>}
@@ -510,7 +510,7 @@ export default function SeatSelectPage() {
               <button
                 disabled={booking}
                 onClick={handlePaymentSubmit}
-                className="client-btn w-full py-4 text-xs font-extrabold uppercase tracking-widest shadow-md hover:shadow-brand-studio/30 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                className="client-btn w-full py-4 text-xs font-display font-extrabold uppercase tracking-widest shadow-md hover:shadow-brand-studio/30 disabled:opacity-50 disabled:cursor-not-allowed transition"
               >
                 {booking ? 'Đang xử lý...' : 'Thanh Toán Ngay'}
               </button>

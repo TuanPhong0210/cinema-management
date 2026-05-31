@@ -5,7 +5,7 @@ const client = axios.create({
 });
 
 export async function gqlRequest(query, variables = {}, auth = true) {
-  const token = localStorage.getItem('managerToken');
+  const token = localStorage.getItem('clientToken') || localStorage.getItem('managerToken');
   const headers = auth && token ? { Authorization: `Bearer ${token}` } : {};
   const { data } = await client.post('', { query, variables }, { headers });
   if (data.errors?.length) {

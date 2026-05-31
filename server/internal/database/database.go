@@ -21,7 +21,7 @@ func Connect(cfg config.Config) (*gorm.DB, error) {
 
 func AutoMigrate(db *gorm.DB) error {
 	return db.AutoMigrate(
-		&domain.Manager{}, &domain.Movie{}, &domain.Room{}, &domain.Seat{},
+		&domain.Manager{}, &domain.User{}, &domain.Movie{}, &domain.Room{}, &domain.Seat{},
 		&domain.Showtime{}, &domain.ShowtimeSeat{}, &domain.Ticket{}, &domain.TicketSeat{},
 		&domain.Employee{}, &domain.Attendance{},
 	)
@@ -42,6 +42,19 @@ func Seed(db *gorm.DB) error {
 	if managers == 0 {
 		hash, _ := bcrypt.GenerateFromPassword([]byte("admin123"), bcrypt.DefaultCost)
 		db.Create(&domain.Manager{Name: "Cinema Admin", Email: "admin@cinema.com", PasswordHash: string(hash)})
+	}
+
+	var users int64
+	db.Model(&domain.User{}).Count(&users)
+	if users == 0 {
+		hash, _ := bcrypt.GenerateFromPassword([]byte("password123"), bcrypt.DefaultCost)
+		db.Create(&domain.User{
+			FullName:     "Nguyễn Văn A",
+			Email:        "vana.nguyen@email.com",
+			PasswordHash: string(hash),
+			Phone:        "090 123 4567",
+			Role:         "Thành viên V.I.P",
+		})
 	}
 
 	var oldMovie domain.Movie

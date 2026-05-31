@@ -69,6 +69,96 @@ func (u *Usecase) DeleteByID(model interface{}, id uint) error {
 	return u.Repo.DB.Delete(model, id).Error
 }
 
+func (u *Usecase) ParseTokenUserID(tokenString string) (uint, error) {
+	if tokenString == "" {
+		return 0, errors.New("missing token")
+	}
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("invalid token")
+		}
+		return []byte(u.JWTSecret), nil
+	})
+	if err != nil || !token.Valid {
+		return 0, errors.New("unauthorized")
+	}
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return 0, errors.New("invalid claims")
+	}
+	rawUID, ok := claims["user_id"]
+	if !ok {
+		return 0, errors.New("user_id not found in token")
+	}
+	switch v := rawUID.(type) {
+	case float64:
+		return uint(v), nil
+	case int64:
+		return uint(v), nil
+	default:
+		return 0, errors.New("invalid user_id format")
+	}
+}
+
+func (u *Usecase) ClientRegister(fullName, email, password, phone string) (interface{}, error) {
+	var count int64
+	u.Repo.DB.Model(&domain.User{}).Where("email = ?", email).Count(&count)
+	if count > 0 {
+		return nil, errors.New("email already exists")
+	}
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, err
+	}
+
+	user := domain.User{
+		FullName:     fullName,
+		Email:        email,
+		PasswordHash: string(hash),
+		Phone:        phone,
+		Role:         "Thành viên V.I.P",
+	}
+
+	if err := u.Repo.DB.Create(&user).Error; err != nil {
+		return nil, err
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id": user.ID,
+		"email":   user.Email,
+		"exp":     time.Now().Add(24 * time.Hour).Unix(),
+	})
+	signed, err := token.SignedString([]byte(u.JWTSecret))
+	if err != nil {
+		return nil, err
+	}
+
+	return map[string]interface{}{"token": signed, "user": user}, nil
+}
+
+func (u *Usecase) ClientLogin(email, password string) (interface{}, error) {
+	var user domain.User
+	if err := u.Repo.DB.Where("email = ?", email).First(&user).Error; err != nil {
+		return nil, errors.New("invalid credentials")
+	}
+	if bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)) != nil {
+		return nil, errors.New("invalid credentials")
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id": user.ID,
+		"email":   user.Email,
+		"exp":     time.Now().Add(24 * time.Hour).Unix(),
+	})
+	signed, err := token.SignedString([]byte(u.JWTSecret))
+	if err != nil {
+		return nil, err
+	}
+
+	return map[string]interface{}{"token": signed, "user": user}, nil
+}
+
 func IsNotFound(err error) bool {
 	return errors.Is(err, gorm.ErrRecordNotFound)
 }

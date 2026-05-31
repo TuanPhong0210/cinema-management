@@ -3,7 +3,11 @@ export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     extend: {
-      fontFamily: { sans: ['Inter', 'sans-serif'] },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        display: ['Montserrat', 'sans-serif'],
+        headline: ['Montserrat', 'sans-serif']
+      },
       colors: {
         cinema: {
           50: '#f5f3ff',
@@ -15,11 +19,11 @@ export default {
           950: '#160820'
         },
         brand: {
-          black: '#010101',
-          studio: '#5f43b2',
+          black: '#15121b',
+          studio: '#8b5cf6',
           peach: 'var(--client-text-primary)',
           pearl: 'var(--client-text-secondary)',
-          martinique: '#3a3153'
+          martinique: '#211e27'
         }
       }
     }

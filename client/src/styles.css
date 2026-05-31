@@ -3,7 +3,14 @@
 @tailwind utilities;
 
 body {
-  @apply bg-stone-100 text-slate-900 font-sans dark:bg-cinema-950 dark:text-slate-100;
+  @apply bg-stone-100 text-slate-900 dark:bg-[#15121b] dark:text-[#e7e0ed];
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
 }
 
 .input {
@@ -11,15 +18,15 @@ body {
 }
 
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-md bg-cinema-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-cinema-900 disabled:cursor-not-allowed disabled:opacity-50;
+  @apply inline-flex items-center justify-center gap-2 rounded-md bg-[#8b5cf6] px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-[#7c3aed] disabled:cursor-not-allowed disabled:opacity-50 font-display;
 }
 
 .btn-secondary {
-  @apply inline-flex items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-cinema-300 hover:text-cinema-700 dark:border-white/10 dark:bg-white/10 dark:text-violet-100 dark:hover:bg-white/15 dark:hover:text-white;
+  @apply inline-flex items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-cinema-300 hover:text-cinema-700 dark:border-white/10 dark:bg-[#211e27] dark:text-violet-100 dark:hover:bg-white/15 dark:hover:text-white;
 }
 
 .panel {
-  @apply rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-[#1f1730] dark:text-slate-100 dark:shadow-none;
+  @apply rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-[#211e27] dark:text-[#e7e0ed] dark:shadow-none;
 }
 
 .table-th {
@@ -31,16 +38,16 @@ body {
 }
 
 .dark .bg-white {
-  background-color: #1f1730;
+  background-color: #211e27;
 }
 
 .dark .bg-white\/80,
 .dark .bg-white\/90 {
-  background-color: rgba(31, 23, 48, 0.9);
+  background-color: rgba(33, 30, 39, 0.9);
 }
 
 .dark .bg-stone-100 {
-  background-color: #160820;
+  background-color: #15121b;
 }
 
 .dark .bg-slate-100 {
@@ -62,12 +69,12 @@ body {
 .dark .text-slate-900,
 .dark .text-slate-700,
 .dark .text-slate-600 {
-  color: #f8fafc;
+  color: #e7e0ed;
 }
 
 .dark .text-slate-500,
 .dark .text-slate-400 {
-  color: #cbd5e1;
+  color: #cbc3d7;
 }
 
 .dark .shadow-sm,
@@ -77,27 +84,27 @@ body {
 }
 
 :root {
-  --client-bg: #ffffff;
-  --client-text-primary: #1e293b;
-  --client-text-secondary: #64748b;
-  --client-surface-bg: linear-gradient(135deg, rgba(248, 250, 252, 0.95), rgba(255, 255, 255, 0.95));
-  --client-surface-border: rgba(95, 67, 178, 0.15);
-  --client-btn-bg: linear-gradient(135deg, #7c3aed, #5b21b6);
+  --client-bg: #faf9fc;
+  --client-text-primary: #3c0091;
+  --client-text-secondary: #65616c;
+  --client-surface-bg: linear-gradient(135deg, #ffffff 0%, #f4f3f6 100%);
+  --client-surface-border: rgba(107, 56, 212, 0.12);
+  --client-btn-bg: linear-gradient(135deg, #6b38d4 0%, #5516be 100%);
   --client-btn-text: #ffffff;
-  --client-glow-shadow: 0 0 34px rgba(95, 67, 178, 0.1);
+  --client-glow-shadow: 0 0 34px rgba(107, 56, 212, 0.1);
   --client-grid-opacity: 0.05;
 }
 
 html.dark {
-  --client-bg: linear-gradient(180deg, #241b45 0%, #3a3153 46%, #12091f 100%);
-  --client-text-primary: #fefdfd;
-  --client-text-secondary: #b1aebb;
-  --client-surface-bg: linear-gradient(135deg, rgba(58, 49, 83, 0.7), rgba(1, 1, 1, 0.24));
-  --client-surface-border: rgba(177, 174, 187, 0.16);
-  --client-btn-bg: linear-gradient(135deg, rgba(95, 67, 178, 0.96), rgba(58, 49, 83, 0.86));
-  --client-btn-text: #fefdfd;
-  --client-glow-shadow: 0 0 34px rgba(95, 67, 178, 0.24);
-  --client-grid-opacity: 0.2;
+  --client-bg: #15121b;
+  --client-text-primary: #e7e0ed;
+  --client-text-secondary: #cbc3d7;
+  --client-surface-bg: linear-gradient(135deg, rgba(33, 30, 39, 0.8), rgba(15, 13, 21, 0.4));
+  --client-surface-border: rgba(208, 188, 255, 0.08);
+  --client-btn-bg: linear-gradient(135deg, #8b5cf6 0%, #6d3bd7 100%);
+  --client-btn-text: #ffffff;
+  --client-glow-shadow: 0 0 34px rgba(139, 92, 246, 0.28);
+  --client-grid-opacity: 0.22;
 }
 
 .client-shell {
@@ -111,18 +118,18 @@ html.dark {
 /* For dark mode background gradient with radial lights */
 html.dark .client-shell {
   background:
-    radial-gradient(circle at 50% 24%, rgba(95, 67, 178, 0.78), rgba(95, 67, 178, 0.16) 24%, transparent 42%),
-    radial-gradient(circle at 18% 16%, rgba(177, 174, 187, 0.18), transparent 28%),
-    radial-gradient(circle at 84% 18%, rgba(95, 67, 178, 0.35), transparent 24%),
-    linear-gradient(180deg, #241b45 0%, #3a3153 46%, #12091f 100%);
+    radial-gradient(circle at 50% 24%, rgba(139, 92, 246, 0.78), rgba(139, 92, 246, 0.16) 24%, transparent 42%),
+    radial-gradient(circle at 18% 16%, rgba(203, 195, 215, 0.18), transparent 28%),
+    radial-gradient(circle at 84% 18%, rgba(139, 92, 246, 0.35), transparent 24%),
+    linear-gradient(180deg, #15121b 0%, #0f0d15 100%);
 }
 
 /* Light mode background with extremely soft purple radial glow */
 html:not(.dark) .client-shell {
   background:
-    radial-gradient(circle at 50% 24%, rgba(124, 58, 237, 0.08), transparent 42%),
-    radial-gradient(circle at 18% 16%, rgba(124, 58, 237, 0.04), transparent 28%),
-    linear-gradient(180deg, #ffffff 0%, #fbfaff 100%);
+    radial-gradient(circle at 50% 24%, rgba(107, 56, 212, 0.08), transparent 42%),
+    radial-gradient(circle at 18% 16%, rgba(107, 56, 212, 0.04), transparent 28%),
+    linear-gradient(180deg, #ffffff 0%, #faf9fc 100%);
 }
 
 .client-shell::before {
@@ -131,7 +138,7 @@ html:not(.dark) .client-shell {
   inset: 0;
   pointer-events: none;
   background-image:
-    radial-gradient(circle, rgba(124, 58, 237, 0.15) 0 1px, transparent 1.4px);
+    radial-gradient(circle, rgba(107, 56, 212, 0.12) 0 1px, transparent 1.4px);
   background-position: 0 0;
   background-size: 78px 78px;
   opacity: var(--client-grid-opacity);
@@ -146,9 +153,9 @@ html:not(.dark) .client-shell {
   height: 46vh;
   pointer-events: none;
   background:
-    linear-gradient(rgba(177, 174, 187, 0.15) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(177, 174, 187, 0.13) 1px, transparent 1px),
-    radial-gradient(ellipse at top, rgba(95, 67, 178, 0.24), transparent 62%);
+    linear-gradient(rgba(203, 195, 215, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(203, 195, 215, 0.13) 1px, transparent 1px),
+    radial-gradient(ellipse at top, rgba(139, 92, 246, 0.24), transparent 62%);
   background-size: 100% 34px, 64px 100%, 100% 100%;
   transform: perspective(520px) rotateX(58deg);
   transform-origin: top;
@@ -178,12 +185,13 @@ html.dark .client-surface {
   border: 1px solid rgba(254, 253, 253, 0.16);
   background: var(--client-btn-bg);
   color: var(--client-btn-text);
+  font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
 }
 
 .client-btn:hover {
   transform: translateY(-1px);
-  border-color: rgba(124, 58, 237, 0.34);
-  box-shadow: 0 0 26px rgba(124, 58, 237, 0.38);
+  border-color: rgba(139, 92, 246, 0.34);
+  box-shadow: 0 0 26px rgba(139, 92, 246, 0.38);
 }

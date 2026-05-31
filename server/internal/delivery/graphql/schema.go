@@ -17,20 +17,22 @@ type ctxKey string
 const tokenKey ctxKey = "token"
 
 type Handler struct {
-	uc              *usecase.Usecase
-	schema          gql.Schema
-	movieObj        *gql.Object
-	roomObj         *gql.Object
-	seatObj         *gql.Object
-	showtimeObj     *gql.Object
-	showtimeSeatObj *gql.Object
-	ticketObj       *gql.Object
-	ticketSeatObj   *gql.Object
-	employeeObj     *gql.Object
-	attendanceObj   *gql.Object
-	managerObj      *gql.Object
-	authPayloadObj  *gql.Object
-	dashboardObj    *gql.Object
+	uc                   *usecase.Usecase
+	schema               gql.Schema
+	movieObj             *gql.Object
+	roomObj              *gql.Object
+	seatObj              *gql.Object
+	showtimeObj          *gql.Object
+	showtimeSeatObj      *gql.Object
+	ticketObj            *gql.Object
+	ticketSeatObj        *gql.Object
+	employeeObj          *gql.Object
+	attendanceObj        *gql.Object
+	managerObj           *gql.Object
+	authPayloadObj       *gql.Object
+	dashboardObj         *gql.Object
+	userObj              *gql.Object
+	clientAuthPayloadObj *gql.Object
 }
 
 func NewHandler(uc *usecase.Usecase) (*Handler, error) {
@@ -85,6 +87,19 @@ func (h *Handler) query() *gql.Object {
 		"tickets":          listField(ticketType, h.auth(h.listTickets)),
 		"employees":        listField(employeeType, h.auth(h.listEmployees)),
 		"attendances":      listField(attendanceType, h.auth(h.listAttendances)),
+		"me": &gql.Field{
+			Type: h.userType(),
+			Resolve: func(p gql.ResolveParams) (interface{}, error) {
+				token, _ := p.Context.Value(tokenKey).(string)
+				uid, err := h.uc.ParseTokenUserID(token)
+				if err != nil {
+					return nil, err
+				}
+				var user domain.User
+				err = h.uc.Repo.DB.First(&user, uid).Error
+				return user, err
+			},
+		},
 	}})
 }
 
@@ -107,13 +122,41 @@ func (h *Handler) mutation() *gql.Object {
 		"createShowtime":     &gql.Field{Type: showtimeType, Args: showtimeArgs(false), Resolve: h.auth(h.createShowtime)},
 		"updateShowtime":     &gql.Field{Type: showtimeType, Args: withID(showtimeArgs(true)), Resolve: h.auth(h.updateShowtime)},
 		"deleteShowtime":     &gql.Field{Type: gql.Boolean, Args: idArg(), Resolve: h.auth(h.deleteShowtime)},
-		"bookTickets":        &gql.Field{Type: ticketType, Args: gql.FieldConfigArgument{"showtimeId": argID(), "seatIds": &gql.ArgumentConfig{Type: gql.NewNonNull(gql.NewList(gql.NewNonNull(gql.ID)))}, "customerName": &gql.ArgumentConfig{Type: gql.String}}, Resolve: h.bookTickets},
+		"bookTickets":        &gql.Field{Type: ticketType, Args: gql.FieldConfigArgument{"showtimeId": argID(), "seatIds": &gql.ArgumentConfig{Type: gql.NewNonNull(gql.NewList(gql.NewNonNull(gql.ID)))}, "customerName": &gql.ArgumentConfig{Type: gql.String}, "userId": &gql.ArgumentConfig{Type: gql.ID}}, Resolve: h.bookTickets},
 		"updateTicketStatus": &gql.Field{Type: ticketType, Args: gql.FieldConfigArgument{"id": argID(), "status": argString()}, Resolve: h.auth(h.updateTicketStatus)},
 		"createEmployee":     &gql.Field{Type: employeeType, Args: employeeArgs(false), Resolve: h.auth(h.createEmployee)},
 		"updateEmployee":     &gql.Field{Type: employeeType, Args: withID(employeeArgs(true)), Resolve: h.auth(h.updateEmployee)},
 		"deleteEmployee":     &gql.Field{Type: gql.Boolean, Args: idArg(), Resolve: h.auth(h.deleteEmployee)},
 		"clockIn":            &gql.Field{Type: attendanceType, Args: gql.FieldConfigArgument{"employeeId": argID()}, Resolve: h.auth(h.clockIn)},
 		"clockOut":           &gql.Field{Type: attendanceType, Args: gql.FieldConfigArgument{"employeeId": argID()}, Resolve: h.auth(h.clockOut)},
+		"clientLogin": &gql.Field{
+			Type: h.clientAuthPayloadType(),
+			Args: gql.FieldConfigArgument{
+				"email":    argString(),
+				"password": argString(),
+			},
+			Resolve: func(p gql.ResolveParams) (interface{}, error) {
+				email := p.Args["email"].(string)
+				password := p.Args["password"].(string)
+				return h.uc.ClientLogin(email, password)
+			},
+		},
+		"clientRegister": &gql.Field{
+			Type: h.clientAuthPayloadType(),
+			Args: gql.FieldConfigArgument{
+				"fullName": argString(),
+				"email":    argString(),
+				"password": argString(),
+				"phone":    argString(),
+			},
+			Resolve: func(p gql.ResolveParams) (interface{}, error) {
+				fullName := p.Args["fullName"].(string)
+				email := p.Args["email"].(string)
+				password := p.Args["password"].(string)
+				phone := p.Args["phone"].(string)
+				return h.uc.ClientRegister(fullName, email, password, phone)
+			},
+		},
 	}})
 }
 
@@ -239,7 +282,19 @@ func (h *Handler) bookTickets(p gql.ResolveParams) (interface{}, error) {
 	if v, ok := p.Args["customerName"].(string); ok && v != "" {
 		name = &v
 	}
-	return h.uc.Repo.BookTickets(toUint(p.Args["showtimeId"]), ids, name)
+	var userID *uint
+	if uidVal, ok := p.Args["userId"]; ok && uidVal != nil {
+		uid := toUint(uidVal)
+		if uid > 0 {
+			userID = &uid
+		}
+	} else {
+		token, _ := p.Context.Value(tokenKey).(string)
+		if uid, err := h.uc.ParseTokenUserID(token); err == nil && uid > 0 {
+			userID = &uid
+		}
+	}
+	return h.uc.Repo.BookTickets(toUint(p.Args["showtimeId"]), ids, name, userID)
 }
 func (h *Handler) updateTicketStatus(p gql.ResolveParams) (interface{}, error) {
 	var item domain.Ticket
@@ -304,7 +359,20 @@ func (h *Handler) ticketType(showtimeType *gql.Object) *gql.Object {
 		h.ticketSeatObj = gql.NewObject(gql.ObjectConfig{Name: "TicketSeat", Fields: gql.Fields{"id": gqlID(), "seatCode": gqlString(), "price": gqlFloat()}})
 	}
 	if h.ticketObj == nil {
-		h.ticketObj = gql.NewObject(gql.ObjectConfig{Name: "Ticket", Fields: gql.Fields{"id": gqlID(), "showtimeId": gqlInt(), "showtime": &gql.Field{Type: showtimeType}, "customerName": gqlString(), "totalPrice": gqlFloat(), "status": gqlString(), "seats": &gql.Field{Type: gql.NewList(h.ticketSeatObj)}}})
+		h.ticketObj = gql.NewObject(gql.ObjectConfig{
+			Name: "Ticket",
+			Fields: gql.Fields{
+				"id":           gqlID(),
+				"showtimeId":   gqlInt(),
+				"showtime":     &gql.Field{Type: showtimeType},
+				"userId":       gqlInt(),
+				"user":         &gql.Field{Type: h.userType()},
+				"customerName": gqlString(),
+				"totalPrice":   gqlFloat(),
+				"status":       gqlString(),
+				"seats":        &gql.Field{Type: gql.NewList(h.ticketSeatObj)},
+			},
+		})
 	}
 	return h.ticketObj
 }
@@ -334,6 +402,45 @@ func (h *Handler) authPayloadType() *gql.Object {
 		h.authPayloadObj = gql.NewObject(gql.ObjectConfig{Name: "AuthPayload", Fields: gql.Fields{"token": gqlString(), "manager": &gql.Field{Type: h.managerObj}}})
 	}
 	return h.authPayloadObj
+}
+
+func (h *Handler) userType() *gql.Object {
+	if h.userObj == nil {
+		h.userObj = gql.NewObject(gql.ObjectConfig{
+			Name: "User",
+			Fields: gql.Fields{
+				"id":        gqlID(),
+				"fullName":  gqlString(),
+				"email":     gqlString(),
+				"phone":     gqlString(),
+				"role":      gqlString(),
+				"createdAt": gqlString(),
+				"tickets": &gql.Field{
+					Type: gql.NewList(h.ticketType(h.showtimeType(h.movieType(), h.roomType()))),
+					Resolve: func(p gql.ResolveParams) (interface{}, error) {
+						user := p.Source.(domain.User)
+						var tickets []domain.Ticket
+						err := h.uc.Repo.DB.Preload("Seats").Preload("Showtime.Movie").Preload("Showtime.Room").Where("user_id = ?", user.ID).Order("id desc").Find(&tickets).Error
+						return tickets, err
+					},
+				},
+			},
+		})
+	}
+	return h.userObj
+}
+
+func (h *Handler) clientAuthPayloadType() *gql.Object {
+	if h.clientAuthPayloadObj == nil {
+		h.clientAuthPayloadObj = gql.NewObject(gql.ObjectConfig{
+			Name: "ClientAuthPayload",
+			Fields: gql.Fields{
+				"token": gqlString(),
+				"user":  &gql.Field{Type: h.userType()},
+			},
+		})
+	}
+	return h.clientAuthPayloadObj
 }
 
 func movieArgs(optional bool) gql.FieldConfigArgument {

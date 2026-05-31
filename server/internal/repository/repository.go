@@ -68,7 +68,7 @@ func (r *Repository) CreateShowtime(showtime *domain.Showtime) error {
 	})
 }
 
-func (r *Repository) BookTickets(showtimeID uint, seatIDs []uint, customerName *string) (*domain.Ticket, error) {
+func (r *Repository) BookTickets(showtimeID uint, seatIDs []uint, customerName *string, userID *uint) (*domain.Ticket, error) {
 	var showtime domain.Showtime
 	if err := r.DB.First(&showtime, showtimeID).Error; err != nil {
 		return nil, err
@@ -88,7 +88,7 @@ func (r *Repository) BookTickets(showtimeID uint, seatIDs []uint, customerName *
 				return fmt.Errorf("seat %s is already booked", seat.Seat.SeatCode)
 			}
 		}
-		ticket = domain.Ticket{ShowtimeID: showtimeID, CustomerName: customerName, TotalPrice: float64(len(selected)) * showtime.TicketPrice, Status: "booked"}
+		ticket = domain.Ticket{ShowtimeID: showtimeID, UserID: userID, CustomerName: customerName, TotalPrice: float64(len(selected)) * showtime.TicketPrice, Status: "booked"}
 		if err := tx.Create(&ticket).Error; err != nil {
 			return err
 		}
