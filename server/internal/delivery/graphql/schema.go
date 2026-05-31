@@ -408,23 +408,25 @@ func (h *Handler) userType() *gql.Object {
 	if h.userObj == nil {
 		h.userObj = gql.NewObject(gql.ObjectConfig{
 			Name: "User",
-			Fields: gql.Fields{
-				"id":        gqlID(),
-				"fullName":  gqlString(),
-				"email":     gqlString(),
-				"phone":     gqlString(),
-				"role":      gqlString(),
-				"createdAt": gqlString(),
-				"tickets": &gql.Field{
-					Type: gql.NewList(h.ticketType(h.showtimeType(h.movieType(), h.roomType()))),
-					Resolve: func(p gql.ResolveParams) (interface{}, error) {
-						user := p.Source.(domain.User)
-						var tickets []domain.Ticket
-						err := h.uc.Repo.DB.Preload("Seats").Preload("Showtime.Movie").Preload("Showtime.Room").Where("user_id = ?", user.ID).Order("id desc").Find(&tickets).Error
-						return tickets, err
+			Fields: gql.FieldsThunk(func() gql.Fields {
+				return gql.Fields{
+					"id":        gqlID(),
+					"fullName":  gqlString(),
+					"email":     gqlString(),
+					"phone":     gqlString(),
+					"role":      gqlString(),
+					"createdAt": gqlString(),
+					"tickets": &gql.Field{
+						Type: gql.NewList(h.ticketType(h.showtimeType(h.movieType(), h.roomType()))),
+						Resolve: func(p gql.ResolveParams) (interface{}, error) {
+							user := p.Source.(domain.User)
+							var tickets []domain.Ticket
+							err := h.uc.Repo.DB.Preload("Seats").Preload("Showtime.Movie").Preload("Showtime.Room").Where("user_id = ?", user.ID).Order("id desc").Find(&tickets).Error
+							return tickets, err
+						},
 					},
-				},
-			},
+				}
+			}),
 		})
 	}
 	return h.userObj
