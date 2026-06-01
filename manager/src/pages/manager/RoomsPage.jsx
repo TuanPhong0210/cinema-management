@@ -29,7 +29,9 @@ export default function RoomsPage() {
     }
   });
 
-  useEffect(load, []);
+  useEffect(() => {
+    load();
+  }, []);
 
   const showSeats = (id) => gqlRequest(`query($id:ID!){ roomSeats(id:$id){ id rowLabel seatNumber seatCode } }`, { id }).then((d) => setSeats(d.roomSeats));
 

@@ -5,7 +5,9 @@ import { gqlRequest } from '../../services/graphql';
 export default function TicketsPage() {
   const [tickets, setTickets] = useState([]);
   const load = () => gqlRequest(`query { tickets { id totalPrice status seats { seatCode price } showtime { showDate startTime movie { title } room { name } } } }`).then((d) => setTickets(d.tickets));
-  useEffect(load, []);
+  useEffect(() => {
+    load();
+  }, []);
   const update = async (id, status) => { await gqlRequest(`mutation($id:ID!,$status:String!){ updateTicketStatus(id:$id,status:$status){ id } }`, { id, status }); load(); };
   return (
     <>

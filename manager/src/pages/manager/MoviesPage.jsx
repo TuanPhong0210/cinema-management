@@ -22,7 +22,9 @@ export default function MoviesPage() {
   }, []);
 
   const load = () => gqlRequest(`query { movies { ${fields} } }`).then((d) => setItems(d.movies));
-  useEffect(load, []);
+  useEffect(() => {
+    load();
+  }, []);
 
   const save = async (e) => {
     e.preventDefault();

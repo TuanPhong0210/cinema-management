@@ -11,7 +11,9 @@ export default function ShowtimesPage() {
   const [form, setForm] = useState(empty);
   const [editing, setEditing] = useState(null);
   const load = () => gqlRequest(`query { showtimes { id movieId roomId showDate startTime endTime ticketPrice movie { title } room { name screenType } } movies { id title } rooms { id name } }`).then((d) => { setItems(d.showtimes); setMovies(d.movies); setRooms(d.rooms); });
-  useEffect(load, []);
+  useEffect(() => {
+    load();
+  }, []);
   const save = async (e) => {
     e.preventDefault();
     const vars = { ...form, ticketPrice: Number(form.ticketPrice) };

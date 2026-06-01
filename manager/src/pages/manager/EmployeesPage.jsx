@@ -24,7 +24,9 @@ export default function EmployeesPage() {
   }, []);
 
   const load = () => gqlRequest(`query { employees { id fullName email phone role isOnShift } }`).then((d) => setItems(d.employees));
-  useEffect(load, []);
+  useEffect(() => {
+    load();
+  }, []);
 
   const save = async (e) => {
     e.preventDefault();
